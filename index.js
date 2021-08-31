@@ -28,32 +28,18 @@ const writeHelloWorld = () => {
 
 };
 
-const addUser = (username) => {
+const addUser = async(username) => {
     //Agregar un usuario en la lista users.json
-    (async () =>{
-        let users = [];
-        try {
-            data = await fs.readFile(usersPath,"utf8");
-            data = data.replace(/[\[\]'"]+/g,'').split(",");
-            data.map(value=> users.push(value));
-            users.push(username);
-            users = JSON.parse(users)
-            fs.writeFile(usersPath, users, (error) =>{
-                if (error) {
-                    console.log("No se pudo escribir en el archivo");
-                }
-            })
-            console.log(users);
-            return users;
-        }catch (error) {
-            console.log(error);
-            return error;
-        }
-    })();
+    try {
+        const data = await fs.readFile(usersPath,"utf8");
+        const users = JSON.parse(data);//convertir de JSON a object
+        users.push(username);
+        await fs.writeFile(usersPath, JSON.stringify(users));
+    }catch (error) {
+        console.log(error);
+    }
 
 };
-
-// addUser("Academlo");
 
 //No hace falta ejecutar las funciones
 
